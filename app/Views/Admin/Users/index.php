@@ -166,8 +166,7 @@
                         <label for="role" class="form-label">Role</label>
                         <select class="form-select" id="role" name="role">
                             <option value="Owner">Owner</option>
-                            <option value="Admin">Admin</option>
-                            <option value="Pegawai">Pegawai</option>
+                            <option value="Kasir">Kasir</option>
                             <option value="Customer">Customer</option>
                         </select>
                     </div>
@@ -235,9 +234,7 @@
                         <label for="role" class="form-label">Role</label>
                         <select class="form-select" id="role" name="role">
                             <option value="Owner" <?= ($user['role'] == 'Owner') ? 'selected' : ''; ?>>Owner</option>
-                            <option value="Admin" <?= ($user['role'] == 'Admin') ? 'selected' : ''; ?>>Admin</option>
-                            <option value="Pegawai" <?= ($user['role'] == 'Pegawai') ? 'selected' : ''; ?>>Pegawai
-                            </option>
+                            <option value="Kasir" <?= ($user['role'] == 'Kasir') ? 'selected' : ''; ?>>Kasir</option>
                             <option value="Customer" <?= ($user['role'] == 'Customer') ? 'selected' : ''; ?>>Customer
                             </option>
                         </select>

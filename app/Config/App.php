@@ -16,7 +16,13 @@ class App extends BaseConfig
      *
      * E.g., http://example.com/
      */
-    public string $baseURL = 'http://localhost/seblak/public/';
+
+    // production
+    public string $baseURL = 'https://web-ismi.my.id';
+
+    // development
+    // public string $baseURL = 'http://localhost/seblak/public/'; 
+
 
     /**
      * Allowed Hostnames in the Site URL other than the hostname in the baseURL.

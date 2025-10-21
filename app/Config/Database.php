@@ -27,9 +27,17 @@ class Database extends Config
     public array $default = [
         'DSN'          => '',
         'hostname'     => 'localhost',
-        'username'     => 'root',
-        'password'     => '',
-        'database'     => 'seblak_bucin_app',
+
+        // production
+        'username'     => 'web-ismi',
+        'password'     => 'web-ismi321$',
+        'database'     => 'web_ismi',
+
+        // developement
+        // 'username'     => 'root',
+        // 'password'     => '',
+        // 'database'     => 'seblak_bucin_app',
+
         'DBDriver'     => 'MySQLi',
         'DBPrefix'     => '',
         'pConnect'     => false,
