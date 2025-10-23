@@ -20,11 +20,6 @@
         <!-- datatables -->
         <link href="<?= base_url('Assets/'); ?>DataTables/datatables.min.css" rel="stylesheet">
 
-        <!-- ckeditor -->
-        <script src="<?= base_url('Assets/'); ?>ckeditor/ckeditor.js"></script>
-
-        <!-- ckfinder -->
-        <script src="<?= base_url('Assets/'); ?>ckfinder/ckfinder.js"></script>
 
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/source-sans-3@5.0.12/index.css"
             integrity="sha256-tXJfXfp6Ewt1ilPzLDtQnJV4hclT9XuaZUKyUvmyr+Q=" crossorigin="anonymous" />
@@ -171,9 +166,6 @@
 
         <!-- datatables -->
         <script src="<?= base_url('Assets/'); ?>DataTables/datatables.min.js"></script>
-
-        <!-- ckfinder -->
-        <script src="<?= base_url('Assets/'); ?>ckfinder/ckfinder.js"></script>
 
         <!-- Page level custom scripts -->
         <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>

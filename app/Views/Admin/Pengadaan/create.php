@@ -80,10 +80,11 @@
                                 style="width: 100%;">
                                 <option selected disabled value="">Pilih Toping</option>
                                 <?php foreach ($toping as $t) : ?>
-                                <option value="<?= $t['id_toping']; ?>"><?= $t['nama_toping']; ?></option>
+                                <option value="<?= $t['id_toping']; ?>"><?= $t['nama_toping']; ?> @
+                                    <?= $t['satuan_toping']; ?></option>
                                 <?php endforeach; ?>
                             </select>
-                            <button type="button" class="btn btn-primary my-2" id="tambahToping">
+                            <button type="button" class="btn btn-primary my-2" id="tambah_toping">
                                 <i class="bi bi-plus"></i>
                             </button>
                         </div>
@@ -97,11 +98,7 @@
                                 <th class="text-center">#</th>
                                 <th>Nama Toping</th>
                                 <th>Exp Toping</th>
-                                <th>Harga Beli</th>
-                                <th>% Jual</th>
-                                <th>Harga Jual</th>
                                 <th>Jumlah</th>
-                                <th>Subtotal</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -124,180 +121,111 @@
 <?= $this->section('script') ?>
 <script type="text/javascript">
 var data_toping = [];
-var total = 0;
-// tambah barang
+// tambah toping
 function tampilToping() {
     var html = '';
     var no = 1;
-    total = 0; // reset total
     // console.log(data_toping);
-    if (data_toping.length > 0) { // jika ada data barang
-        data_toping.forEach(function(item) { // tampilkan data barang
+    if (data_toping.length > 0) { // jika ada data toping
+        data_toping.forEach(function(item) { // tampilkan data toping
             html += '<tr>';
             html += '<td class="text-center">' + no + '</td>';
             html += '<td>' + item.nama_toping + '</td>';
-            html += '<td> <input type="date" name="exp_barang[]" class="form-control" value="' + item
-                .exp_barang +
+            html += '<td> <input type="date" name="exp_toping[]" class="form-control" value="' + item
+                .exp_toping +
                 '" min="<?= date('Y-m-d'); ?>"> </td>';
-            html += '<td> <input type="text" name="harga[]" class="form-control" min="1" value="' + item
-                .harga +
-                '" > </td>';
-            html +=
-                '<td> <input type="number" name="persen_jual[]" class="form-control persen_jual" min="1" value="' +
-                item
-                .persen_jual +
-                '" > </td>';
-            html +=
-                '<td> <input type="text" name="harga_jual[]" class="form-control harga_jual" min="1" readonly value="' +
-                item
-                .harga_jual +
-                '" > </td>';
             html +=
                 '<td> <input type="number" name="jumlah[]" class="form-control text-center" min="1" style="max-width: 100px;" value="' +
                 item
                 .jumlah +
                 '" > </td>';
-            html += '<td> <input type="text" name="subtotal[]" class="form-control" value="' + formatRupiah(item
-                    .subtotal) +
-                '" readonly> </td>';
-            html += '<td><button type="button" class="btn btn-danger btn-sm" onclick="hapusBarang(' + no +
-                ')"><i class="fa fa-trash"></i></button></td>';
+            html += '<td><button type="button" class="btn btn-danger btn-sm" onclick="hapustoping(' + no +
+                ')"><i class="bi bi-trash"></i></button></td>';
             no++;
             html += '</tr>';
-
-            total += item.subtotal;
         });
 
-        html += '<tr>';
-        html += '<td colspan="7" class="text-right">Total</td>';
-        html += '<td><input type="text" name="total" class="form-control" value="' + formatRupiah(total) +
-            '" readonly></td>';
-        html += '<td></td>';
-        html += '</tr>';
-    } else { // jika tidak ada data barang
+    } else { // jika tidak ada data toping
         html += '<tr>';
         html += '<td colspan="9" class="text-center">Tidak ada data</td>';
         html += '</tr>';
     }
 
-    $('#tabel_transaksi_masuk').html(html);
+    $('#tabel_pengadaan_toping').html(html);
 }
 
-tampilToping(); // tampilkan barang
+tampilToping(); // tampilkan toping
 
-// tambah barang
-$('#tambah_barang').on('click', function() {
-    // alert('tambah barang');
-    var id_tipe_barang = $('#id_tipe_barang').val();
-    var nama_toping = $('#id_tipe_barang option:selected').text();
-    var harga = $('#id_tipe_barang option:selected').data('harga');
-    var persen_jual = 20;
-    var harga_jual = (harga * persen_jual / 100) + harga;
-    var jumlah = 1;
-    var subtotal = harga * jumlah;
-
-    if (id_tipe_barang == '') { // jika barang belum dipilih
-        alert('Pilih barang');
+// tambah toping
+$('#tambah_toping').on('click', function() {
+    // alert('tambah toping');
+    var id_toping = $('#id_toping').val();
+    var nama_toping = $('#id_toping option:selected').text();
+    if (id_toping == '') { // jika toping belum dipilih
+        alert('Pilih toping');
         return false;
     }
 
-    // jika barang sudah ada
-    var index = data_toping.findIndex(x => x.id_tipe_barang == id_tipe_barang);
+    // jika toping sudah ada
+    var index = data_toping.findIndex(x => x.id_toping == id_toping);
 
-    if (index == -1) { // jika barang belum ada
+    if (index == -1) { // jika toping belum ada
         data_toping.push({
-            id_tipe_barang: id_tipe_barang,
+            id_toping: id_toping,
             nama_toping: nama_toping,
-            exp_barang: '',
-            harga: harga,
-            persen_jual: persen_jual,
-            harga_jual: harga_jual,
-            jumlah: jumlah,
-            subtotal: subtotal
+            exp_toping: '',
+            jumlah: 1
         });
-    } else { // jika barang sudah ada
+    } else { // jika toping sudah ada
         data_toping[index].jumlah += 1;
-        data_toping[index].subtotal = data_toping[index].jumlah * data_toping[index].harga;
     }
-
-    tampilToping(); // tampilkan barang
-});
-
-// ubah jumlah barang
-$('#tabel_transaksi_masuk').on('change', 'input[name="jumlah[]"]', function() {
-    // alert('ubah jumlah barang');
-    var index = $(this).closest('tr').index(); // index baris
-    var jumlah = $(this).val(); // jumlah barang
-    var harga = data_toping[index].harga; // harga barang
-    var subtotal = jumlah * harga; // subtotal
-
-    data_toping[index].jumlah = jumlah; // ubah jumlah barang
-    data_toping[index].subtotal = subtotal; // ubah subtotal barang
-
-    total = 0; // reset total
-    tampilToping(); // tampilkan barang
-});
-
-// ubah harga barang
-$('#tabel_transaksi_masuk').on('change', 'input[name="harga[]"]', function() {
-    // alert('ubah harga barang');
-    var index = $(this).closest('tr').index(); // index baris
-    var harga = $(this).val(); // harga barang
-    var jumlah = data_toping[index].jumlah; // jumlah barang
-    var subtotal = jumlah * harga; // subtotal
-
-    data_toping[index].harga = harga; // ubah harga barang
-    data_toping[index].subtotal = subtotal; // ubah subtotal barang
-
-    tampilToping(); // tampilkan barang
-});
-
-// ubah tanggal exp barang
-$('#tabel_transaksi_masuk').on('change', 'input[name="exp_barang[]"]', function() {
-    // alert('ubah exp barang');
-    var index = $(this).closest('tr').index(); // index baris
-    var exp_barang = $(this).val(); // tanggal exp barang
-
-    data_toping[index].exp_barang = exp_barang; // ubah tanggal exp barang
     console.log(data_toping);
-    tampilToping(); // tampilkan barang
+    tampilToping(); // tampilkan toping
+});
+
+// ubah jumlah toping
+$('#tabel_pengadaan_toping').on('change', 'input[name="jumlah[]"]', function() {
+    // alert('ubah jumlah toping');
+    var index = $(this).closest('tr').index(); // index baris
+    var jumlah = $(this).val(); // jumlah toping
+
+    data_toping[index].jumlah = jumlah; // ubah jumlah toping
+
+    tampilToping(); // tampilkan toping
 });
 
 
-// change persen jual
-$('#tabel_transaksi_masuk').on('change', 'input[name="persen_jual[]"]', function() {
-    // alert('ubah persen jual');
+// ubah tanggal exp toping
+$('#tabel_pengadaan_toping').on('change', 'input[name="exp_toping[]"]', function() {
+    // alert('ubah exp toping');
     var index = $(this).closest('tr').index(); // index baris
-    var persen_jual = $(this).val(); // persen jual
-    var harga = data_toping[index].harga; // harga barang
-    var harga_jual = (harga * persen_jual / 100) + harga; // harga jual
+    var exp_toping = $(this).val(); // tanggal exp toping
 
-    data_toping[index].persen_jual = persen_jual; // ubah persen jual
-    data_toping[index].harga_jual = harga_jual; // ubah harga jual
+    data_toping[index].exp_toping = exp_toping; // ubah tanggal exp toping
+    console.log(data_toping);
+    tampilToping(); // tampilkan toping
+});
 
-    tampilToping(); // tampilkan barang
-})
 
-// hapus barang
-function hapusBarang(index) {
-    // alert('hapus barang ' + index);
+// hapus toping
+function hapustoping(index) {
+    // alert('hapus toping ' + index);
     data_toping.splice(index - 1, 1);
-    total = 0; // reset total
-    tampilToping(); // tampilkan barang
+    tampilToping(); // tampilkan toping
 }
 
 
 // simpan data
 $('form').submit(function() {
     // alert('submit');
-    if (data_toping.length == 0) { // jika tidak ada data barang
-        alert('Pilih barang');
+    if (data_toping.length == 0) { // jika tidak ada data toping
+        alert('Pilih toping');
         return false;
     }
 
-    var exp_barang = data_toping.filter(x => x.exp_barang == '');
-    if (exp_barang.length > 0) {
-        alert('Isi tanggal kadaluarsa barang yang belum diisi');
+    var exp_toping = data_toping.filter(x => x.exp_toping == '');
+    if (exp_toping.length > 0) {
+        alert('Isi tanggal kadaluarsa toping yang belum diisi');
         return false;
     }
 
@@ -306,11 +234,8 @@ $('form').submit(function() {
     $('#btn_simpan').attr('disabled', true);
 
     var form_data = $(this).serializeArray(); // ambil semua data form
-    form_data.push({ // tambahkan total transaksi
-        name: 'total_transaksi',
-        value: total
-    });
-    form_data.push({ // tambahkan data barang
+
+    form_data.push({ // tambahkan data toping
         name: 'data_toping',
         value: JSON.stringify(data_toping)
     });

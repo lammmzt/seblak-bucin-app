@@ -7,7 +7,7 @@ class topingModel extends Model
 {
     protected $table = 'toping';
     protected $primaryKey = 'id_toping';
-    protected $allowedFields = ['id_toping', 'kategori_toping', 'nama_toping', 'ket_toping', 'foto_toping', 'satuan_toping', 'status_toping', 'harga_toping','created_at', 'updated_at'];
+    protected $allowedFields = ['id_toping', 'kategori_toping', 'nama_toping', 'ket_toping', 'foto_toping', 'satuan_toping', 'status_toping', 'harga_toping','stok_toping','created_at', 'updated_at'];
 
     public function getToping($id = false)
     {
