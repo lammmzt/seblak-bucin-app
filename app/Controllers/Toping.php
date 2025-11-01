@@ -103,10 +103,10 @@ class Toping extends BaseController
     public function update(){
         $topingModel = new topingModel(); // membuat objek model toping
         $validation = \Config\Services::validation();
-       
+        $id_toping = $this->request->getPost('id_toping');
         $validation->setRules([
             'nama_toping' => [
-                'rules' => 'required',
+                'rules' => 'required|is_unique[toping.nama_toping,id_toping,'.$id_toping.']',
                 'errors' => [
                     'required' => 'Nama toping harus diisi',
                 ],
@@ -142,7 +142,6 @@ class Toping extends BaseController
             return redirect()->to('/Toping')->withInput();
         }
 
-        $id_toping = $this->request->getPost('id_toping');
         $data_toping = $topingModel->find($id_toping);
         // check apakah ada upload foto_toping 
         // dd($data_toping);
@@ -167,20 +166,20 @@ class Toping extends BaseController
             'harga_toping' => $this->request->getPost('harga_toping'),
             'satuan_toping' => $this->request->getPost('satuan_toping'),
             'foto_toping' => $newName,
-            'status_toping' => $this->request->getPost('status_menu'),
+            'status_toping' => $this->request->getPost('status_toping'),
         ];
         
-        $menuModel->update($id_menu, $datas);
-        session()->setFlashdata('success', 'Data Menu berhasil diubah.');
-        return redirect()->to('/Menu');
+        $topingModel->update($id_toping, $datas);
+        session()->setFlashdata('success', 'Data toping berhasil diubah.');
+        return redirect()->to('/Toping');
     }
 
-    public function delete($id_menu)
+    public function delete($id_toping)
     {
-        $menuModel = new menuModel(); // membuat objek model Menu
-        $menuModel->where('id_menu', $id_menu)->delete();
-        session()->setFlashdata('success', 'Data Menu berhasil dihapus.');
-        return redirect()->to('/Menu');
+        $topingModel = new topingModel(); // membuat objek model toping
+        $topingModel->where('id_toping', $id_toping)->delete();
+        session()->setFlashdata('success', 'Data toping berhasil dihapus.');
+        return redirect()->to('/Toping');
     }
 
 }

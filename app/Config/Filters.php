@@ -12,6 +12,10 @@ use CodeIgniter\Filters\InvalidChars;
 use CodeIgniter\Filters\PageCache;
 use CodeIgniter\Filters\PerformanceMetrics;
 use CodeIgniter\Filters\SecureHeaders;
+use App\Filters\Middleware;
+use App\Filters\filterKasir;
+use App\Filters\filterOwner;
+use App\Filters\filterCustomer;
 
 class Filters extends BaseFilters
 {
@@ -34,6 +38,10 @@ class Filters extends BaseFilters
         'forcehttps'    => ForceHTTPS::class,
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
+        'Middleware'    => Middleware::class,
+        'filterKasir'   => filterKasir::class,
+        'filterOwner'   => filterOwner::class,
+        'filterCustomer'   => filterCustomer::class,
     ];
 
     /**
@@ -71,12 +79,15 @@ class Filters extends BaseFilters
      * }
      */
     public array $globals = [
-        'before' => [
-            // 'honeypot',
+       'before' => [
+           'Middleware' => ['except' => ['Auth','Auth/*','LandingPage/*']],
             // 'csrf',
             // 'invalidchars',
         ],
         'after' => [
+            'filterKasir' => ['except' => [ 
+                '/', 'Auth/logout', 'Auth/login','Menu', 'Menu/*', 'LandingPage/*', 'LandingPage', 'Toping', 'Toping/*','Pengadaan', 'Pengadaan/*', 'Users', 'Users/*',
+            ]],
             // 'honeypot',
             // 'secureheaders',
         ],

@@ -57,6 +57,7 @@
                         <p>Data Pengadaan</p>
                     </a>
                 </li>
+                <li class="nav-header">Laporan</li>
             </ul>
             <!--end::Sidebar Menu-->
         </nav>

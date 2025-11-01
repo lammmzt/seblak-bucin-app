@@ -42,6 +42,8 @@ class Users extends BaseController
             'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
             'nama_user' => ucwords($this->request->getPost('nama_user')),
             'status_user' => $this->request->getPost('status_user'),
+            'no_hp_user' => $this->request->getPost('no_hp_user'),
+            'alamat_user' => $this->request->getPost('alamat_user'),
             'role' => $this->request->getPost('role'),
             'created_at' => date('Y-m-d H:i:s')
         ];
@@ -86,6 +88,9 @@ class Users extends BaseController
             'id_user' => $this->request->getPost('id_user'),
             'nama_user' => ucwords($this->request->getPost('nama_user')),
             'status_user' => $this->request->getPost('status_user'),
+            'no_hp_user' => $this->request->getPost('no_hp_user'),
+            'alamat_user' => $this->request->getPost('alamat_user'),
+            'password' => $new_pass,
             'role' => $this->request->getPost('role'),
             'updated_at' => date('Y-m-d H:i:s')
         ];

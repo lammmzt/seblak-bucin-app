@@ -24,7 +24,7 @@ class Auth extends BaseController
         $password = $this->request->getPost('password');
         // dd($username, $password);
         $model = new usersModel();
-        $user = $model->where('username', $username)->first();
+        $user = $model->where('id_user', $username)->first();
 
         if($user){
             if(password_verify($password, $user['password'])){

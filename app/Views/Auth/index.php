@@ -1,20 +1,14 @@
-<?php 
-    use App\Models\dataInstansiModel;
-    $instansiModel = new dataInstansiModel();
-    $data_instansi = $instansiModel->first();  
-?>
 <!doctype html>
 <html lang="en">
 <!--begin::Head-->
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title><?= $title; ?> | <?= $data_instansi['nama_alias_insansi']; ?></title>
+    <title><?= $title; ?> | Seblak Bucin</title>
     <!--begin::Primary Meta Tags-->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="title" content="<?= $title; ?> | <?= $data_instansi['nama_alias_insansi']; ?>" />
-    <link rel="shortcut icon" href="<?= base_url('Assets/img/data_instansi/').$data_instansi['logo_instansi']; ?>"
-        type="image/x-icon" />
+    <meta name="title" content="<?= $title; ?> | Seblak Bucin" />
+    <link rel="shortcut icon" href="<?= base_url('Assets/img/logo-seblak.png'); ?>" type="image/x-icon" />
     <meta name="author" content="ColorlibHQ" />
     <meta name="description"
         content="AdminLTE is a Free Bootstrap 5 Admin Dashboard, 30 example pages using Vanilla JS." />
@@ -66,12 +60,11 @@
         <div class="card">
             <div class="card-body login-card-body">
                 <p class="login-box-msg">
-                    <img src="<?= base_url('Assets/img/data_instansi/').$data_instansi['logo_instansi']; ?>"
-                        class="img-fluid" alt="Logo <?= $data_instansi['nama_alias_insansi']; ?>" width="100"
-                        height="100">
-                <h4 class="text-center"><?= $data_instansi['nama_alias_insansi']; ?></h4>
+                    <img src="<?= base_url('Assets/img/logo-seblak.png'); ?>" class="img-fluid" alt="Logo Seblak Bucin"
+                        width="100" height="100">
+                <h4 class="text-center">Seblak Bucin</h4>
                 <p class="text-center">
-                    Sistem Informasi Surat Masuk dan Keluar.
+                    Silahkan Masuk
                 </p>
                 <form method="post" id="form-login">
                     <div class="input-group mb-3">

@@ -102,10 +102,12 @@ class Menu extends BaseController
     public function update(){
         $menuModel = new menuModel(); // membuat objek model Menu
         $validation = \Config\Services::validation();
-       
+        
+        $id_menu = $this->request->getPost('id_menu');
+
         $validation->setRules([
             'nama_menu' => [
-                'rules' => 'required',
+                'rules' => 'required|is_unique[toping.nama_toping,id_toping,'.$id_toping.']',
                 'errors' => [
                     'required' => 'Nama Menu harus diisi',
                 ],
@@ -141,7 +143,6 @@ class Menu extends BaseController
             return redirect()->to('/Menu')->withInput();
         }
 
-        $id_menu = $this->request->getPost('id_menu');
         $data_menu = $menuModel->find($id_menu);
         // check apakah ada upload foto_menu 
         // dd($data_menu);

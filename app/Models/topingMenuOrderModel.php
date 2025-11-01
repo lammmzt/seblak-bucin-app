@@ -7,7 +7,7 @@ class topingMenuOrderModel extends Model
 {
     protected $table = 'toping_menu_order';
     protected $primaryKey = 'id_toping_menu_order';
-    protected $allowedFields = ['id_order', 'id_menu_order', 'id_detail_toping', 'jumlah_toping_menu_order', 'sbutotal_toping_menu_order', 'created_at', 'updated_at'];
+    protected $allowedFields = ['id_order', 'id_menu_order', 'id_detail_toping', 'jumlah_toping_menu_order', 'subutotal_toping_menu_order', 'created_at', 'updated_at'];
 
     public function geTopingMenuOrder($id = false)
     {

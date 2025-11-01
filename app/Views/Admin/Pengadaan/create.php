@@ -53,23 +53,22 @@
                 <?php endif; ?>
             </div>
 
-            <form action="<?= base_url('Pengadaan/create'); ?>" method="POST" enctype="multipart/form-data"
-                class="mx-3">
+            <form method="POST" enctype="multipart/form-data" class="mx-3">
                 <?= csrf_field(); ?>
 
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="mb-3">
-                            <label for="judul_pengadan_toping" class="form-label">Judul Pengadaan</label>
-                            <input type="text" class="form-control" id="judul_pengadan_toping"
-                                name="judul_pengadan_toping" value="<?= old('judul_pengadan_toping'); ?>"
+                            <label for="judul_pengadaan_toping" class="form-label">Judul Pengadaan</label>
+                            <input type="text" class="form-control" id="judul_pengadaan_toping"
+                                name="judul_pengadaan_toping" value="<?= old('judul_pengadaan_toping'); ?>"
                                 placeholder="Masukkan Judul Pengadaan" required>
                         </div>
                     </div>
                     <div class="col-lg-6">
                         <div class="mb-3">
-                            <label for="ket_pengadan_toping" class="form-label">Keterangan Pengadaan</label>
-                            <textarea class="form-control" id="ket_pengadan_toping" name="ket_pengadan_toping"
+                            <label for="ket_pengadaan_toping" class="form-label">Keterangan Pengadaan</label>
+                            <textarea class="form-control" id="ket_pengadaan_toping" name="ket_pengadaan_toping"
                                 placeholder="Masukkan Keterangan Pengadaan" required></textarea>
                         </div>
                     </div>
@@ -80,7 +79,8 @@
                                 style="width: 100%;">
                                 <option selected disabled value="">Pilih Toping</option>
                                 <?php foreach ($toping as $t) : ?>
-                                <option value="<?= $t['id_toping']; ?>"><?= $t['nama_toping']; ?> @
+                                <option value="<?= $t['id_toping']; ?>" data-harga="<?= $t['harga_toping']; ?>">
+                                    <?= $t['nama_toping']; ?> @
                                     <?= $t['satuan_toping']; ?></option>
                                 <?php endforeach; ?>
                             </select>
@@ -97,8 +97,11 @@
                             <tr>
                                 <th class="text-center">#</th>
                                 <th>Nama Toping</th>
-                                <th>Exp Toping</th>
+                                <th>Exp toping</th>
+                                <th>Harga Pengadaan</th>
+                                <th>Harga Jual</th>
                                 <th>Jumlah</th>
+                                <th>Subtotal</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -121,10 +124,12 @@
 <?= $this->section('script') ?>
 <script type="text/javascript">
 var data_toping = [];
+var total = 0;
 // tambah toping
-function tampilToping() {
+function tampiltoping() {
     var html = '';
     var no = 1;
+    total = 0; // reset total
     // console.log(data_toping);
     if (data_toping.length > 0) { // jika ada data toping
         data_toping.forEach(function(item) { // tampilkan data toping
@@ -134,17 +139,37 @@ function tampilToping() {
             html += '<td> <input type="date" name="exp_toping[]" class="form-control" value="' + item
                 .exp_toping +
                 '" min="<?= date('Y-m-d'); ?>"> </td>';
+            html += '<td> <input type="number" name="harga[]" class="form-control" min="1" value="' + item
+                .harga +
+                '" > </td>';
+            html +=
+                '<td> <input type="number" name="harga_jual[]" class="form-control harga_jual" min="1" value="' +
+                item
+                .harga_jual +
+                '" > </td>';
             html +=
                 '<td> <input type="number" name="jumlah[]" class="form-control text-center" min="1" style="max-width: 100px;" value="' +
                 item
                 .jumlah +
                 '" > </td>';
-            html += '<td><button type="button" class="btn btn-danger btn-sm" onclick="hapustoping(' + no +
+            html += '<td> <input type="text" name="subtotal[]" class="form-control" value="' + formatRupiah(item
+                    .subtotal) +
+                '" readonly> </td>';
+            html += '<td><button type="button" class="btn btn-danger btn-sm" onclick="hapusToping(' + no +
                 ')"><i class="bi bi-trash"></i></button></td>';
             no++;
             html += '</tr>';
+
+            total += item.subtotal;
         });
 
+        html += '<tr>';
+        html += '<td colspan="7" class="text-right">Total</td>';
+        html += '<td><input type="text" name="total_pengadaan_toping" class="form-control" value="' + formatRupiah(
+                total) +
+            '" readonly></td>';
+        html += '<td></td>';
+        html += '</tr>';
     } else { // jika tidak ada data toping
         html += '<tr>';
         html += '<td colspan="9" class="text-center">Tidak ada data</td>';
@@ -154,13 +179,18 @@ function tampilToping() {
     $('#tabel_pengadaan_toping').html(html);
 }
 
-tampilToping(); // tampilkan toping
+tampiltoping(); // tampilkan toping
 
 // tambah toping
 $('#tambah_toping').on('click', function() {
     // alert('tambah toping');
     var id_toping = $('#id_toping').val();
     var nama_toping = $('#id_toping option:selected').text();
+    var harga = $('#id_toping option:selected').data('harga');
+    var harga_jual = harga;
+    var jumlah = 1;
+    var subtotal = harga * jumlah;
+
     if (id_toping == '') { // jika toping belum dipilih
         alert('Pilih toping');
         return false;
@@ -174,13 +204,17 @@ $('#tambah_toping').on('click', function() {
             id_toping: id_toping,
             nama_toping: nama_toping,
             exp_toping: '',
-            jumlah: 1
+            harga: harga,
+            harga_jual: harga_jual,
+            jumlah: jumlah,
+            subtotal: subtotal
         });
     } else { // jika toping sudah ada
         data_toping[index].jumlah += 1;
+        data_toping[index].subtotal = data_toping[index].jumlah * data_toping[index].harga;
     }
-    console.log(data_toping);
-    tampilToping(); // tampilkan toping
+
+    tampiltoping(); // tampilkan toping
 });
 
 // ubah jumlah toping
@@ -188,12 +222,29 @@ $('#tabel_pengadaan_toping').on('change', 'input[name="jumlah[]"]', function() {
     // alert('ubah jumlah toping');
     var index = $(this).closest('tr').index(); // index baris
     var jumlah = $(this).val(); // jumlah toping
+    var harga = data_toping[index].harga; // harga toping
+    var subtotal = jumlah * harga; // subtotal
 
     data_toping[index].jumlah = jumlah; // ubah jumlah toping
+    data_toping[index].subtotal = subtotal; // ubah subtotal toping
 
-    tampilToping(); // tampilkan toping
+    total = 0; // reset total
+    tampiltoping(); // tampilkan toping
 });
 
+// ubah harga toping
+$('#tabel_pengadaan_toping').on('change', 'input[name="harga[]"]', function() {
+    // alert('ubah harga toping');
+    var index = $(this).closest('tr').index(); // index baris
+    var harga = $(this).val(); // harga toping
+    var jumlah = data_toping[index].jumlah; // jumlah toping
+    var subtotal = jumlah * harga; // subtotal
+
+    data_toping[index].harga = harga; // ubah harga toping
+    data_toping[index].subtotal = subtotal; // ubah subtotal toping
+
+    tampiltoping(); // tampilkan toping
+});
 
 // ubah tanggal exp toping
 $('#tabel_pengadaan_toping').on('change', 'input[name="exp_toping[]"]', function() {
@@ -203,15 +254,24 @@ $('#tabel_pengadaan_toping').on('change', 'input[name="exp_toping[]"]', function
 
     data_toping[index].exp_toping = exp_toping; // ubah tanggal exp toping
     console.log(data_toping);
-    tampilToping(); // tampilkan toping
+    tampiltoping(); // tampilkan toping
 });
 
 
+// change persen jual
+$('#tabel_pengadaan_toping').on('change', 'input[name="harga_jual[]"]', function() {
+    // alert('ubah persen jual');
+    var index = $(this).closest('tr').index(); // index baris
+    var harga_jual = $(this).val(); // persen jual
+    data_toping[index].harga_jual = harga_jual; // ubah persen jual
+    tampiltoping(); // tampilkan toping
+})
 // hapus toping
-function hapustoping(index) {
+function hapusToping(index) {
     // alert('hapus toping ' + index);
     data_toping.splice(index - 1, 1);
-    tampilToping(); // tampilkan toping
+    total = 0; // reset total
+    tampiltoping(); // tampilkan toping
 }
 
 
@@ -230,24 +290,28 @@ $('form').submit(function() {
     }
 
     // ubah btn simpan to loading
-    $('#btn_simpan').html('<i class="fa fa-spin fa-spinner"></i> Loading...');
+    $('#btn_simpan').html('<i class="bi bi-hourglass-split"></i> Loading...');
     $('#btn_simpan').attr('disabled', true);
 
     var form_data = $(this).serializeArray(); // ambil semua data form
+    form_data.push({ // tambahkan total transaksi
+        name: 'total_pengadaan_toping',
+        value: total
+    });
 
     form_data.push({ // tambahkan data toping
         name: 'data_toping',
         value: JSON.stringify(data_toping)
     });
-    // console.log(form_data);
+    console.log(form_data);
     $.ajax({
-        url: '<?= base_url('Transaksi/simpan_transaksi_masuk'); ?>',
+        url: '<?= base_url('Pengadaan/save'); ?>',
         type: 'post',
         data: form_data,
         dataType: 'json',
         success: function(hasil) {
             if (hasil.status == 200) {
-                location.href = '<?= base_url('Transaksi/Masuk'); ?>';
+                location.href = '<?= base_url('Pengadaan'); ?>';
                 // console.log(hasil.data);
             } else {
                 alert(hasil.pesan);

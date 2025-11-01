@@ -1,5 +1,9 @@
 <?= $this->extend('Template/index') ?>
 <?= $this->section('content') ?>
+<?php 
+    use App\Models\detailPengadaanTopingModel;
+    $detailModel = new detailPengadaanTopingModel();
+?>
 <div class="col-sm-12">
     <div class="card">
         <div class="card-header">
@@ -74,13 +78,13 @@
                         <tr>
                             <td><?= $no++; ?></td>
                             <td><?= $pengadaan['nama_user']; ?></td>
-                            <td><?= $pengadaan['judul_pengadan_toping']; ?></td>
+                            <td><?= $pengadaan['judul_pengadaan_toping']; ?></td>
                             <td><?= date('d F Y', strtotime($pengadaan['created_at'])); ?></td>
                             <td>
                                 <div class="flex align-items-center list-pengadaan-action">
-                                    <a class="btn btn-sm btn-icon btn-warning" data-bs-toggle="modal" href="#"
-                                        data-bs-target="#editpengadaans<?= $pengadaan['id_pengadaan_toping']; ?>">
-                                        Edit <i class="bi bi-pencil-square"></i>
+                                    <a class="btn btn-sm btn-icon btn-info" data-bs-toggle="modal" href="#"
+                                        data-bs-target="#detailPengadaan<?= $pengadaan['id_pengadaan_toping']; ?>">
+                                        Detail <i class="bi bi-info-circle"></i>
                                     </a>
                                     <!-- <a class="btn btn-sm btn-icon btn-danger" data-bs-toggle="tooltip"
                                         data-bs-placement="top" title="Delete"
@@ -111,4 +115,91 @@
         </div>
     </div>
 </div>
+<!-- modal detail -->
+<?php foreach($data_pengadaan as $pengadaan): ?>
+<div class="modal fade" id="detailPengadaan<?= $pengadaan['id_pengadaan_toping']; ?>" data-bs-backdrop="static"
+    data-bs-keyboard="false" tabindex="-1" aria-labelledby="detailPengadaanLabel" aria-hidden="true">
+    <div class="modal-lg modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detailPengadaanLabel">Detail Pengadaan</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="row py-2">
+                    <div class="col-6">
+                        <label for="id_pengadaan_toping" class="form-label">Kode Pengadaan</label>
+                        <input type="text" class="form-control" id="id_pengadaan_toping"
+                            value="<?= $pengadaan['id_pengadaan_toping']; ?>" readonly>
+                    </div>
+                    <div class="col-6">
+                        <label for="nama_user" class="form-label">Nama Pegawai</label>
+                        <input type="text" class="form-control" id="nama_user" value="<?= $pengadaan['nama_user']; ?>"
+                            readonly>
+                    </div>
+                    <div class="col-6">
+                        <label for="tgl_pengadaan" class="form-label">Tanggal Pengadaan</label>
+                        <input type="text" class="form-control" id="tgl_pengadaan"
+                            value="<?=date('d F Y', strtotime($pengadaan['created_at'])); ?>" readonly>
+                    </div>
+                    <div class="col-6">
+                        <label for="keterangan" class="form-label">Keterangan</label>
+                        <textarea class="form-control" id="keterangan" rows="3"
+                            readonly><?= $pengadaan['ket_pengadaan_toping']; ?></textarea>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        <table class="table table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">No</th>
+                                    <th>Nama Toping</th>
+                                    <th>Exp Toping</th>
+                                    <th>Harga</th>
+                                    <th>Harga Jual</th>
+                                    <th>Jumlah</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php 
+                               
+                                $details = $detailModel->getDetailPengadaanByIdPengadaan($pengadaan['id_pengadaan_toping']);
+                                $no = 1;
+                                foreach($details as $detail): ?>
+                                <tr>
+                                    <td class="text-center"><?= $no++; ?></td>
+                                    <td><?= $detail['nama_toping']; ?></td>
+                                    <td><?= date('d F Y', strtotime($detail['exp_detail_pengadaan_toping'])); ?></td>
+                                    <td><?= number_format($detail['harga_modal_detail_pengadaan_toping'], 0, ',', '.'); ?>
+                                    </td>
+                                    <td><?= number_format($detail['harga_jual_detail_pengadaan_toping'], 0, ',', '.'); ?>
+                                    </td>
+                                    <td><?= $detail['jumlah_detail_pengadaan_toping']; ?></td>
+                                    <td><?= number_format($detail['subtotal_detail_pengadaan_toping'], 0, ',', '.'); ?>
+                                    </td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th colspan="6" class="text-right">Total</th>
+                                    <th><?= number_format($pengadaan['total_pengadaan_toping'], 0, ',', '.'); ?></th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<?php endforeach; ?>
+
 <?= $this->endSection('content'); ?>
