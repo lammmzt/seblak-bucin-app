@@ -251,11 +251,12 @@
                         <label for="satuan_toping" class="form-label">Satuan</label>
                         <select class="form-select" aria-label="Default select example" name="satuan_toping" required
                             id="satuan_toping">
-                            <option value="Pcs">Pcs</option>
-                            <option value="Gram">Gram</option>
-                            <option value="Centong">Centong</option>
-                            <option value="Iket">Iket</option>
-                            <option value="Paket">Paket</option>
+                            <option value="Pcs" <?= $toping['satuan_toping'] == 'Pcs' ? 'selected' : ''; ?>>Pcs</option>
+                            <option value="Gram" <?= $toping['satuan_toping'] == 'Gram' ? 'selected' : ''; ?>>Gram
+                            <option value="Centong" <?= $toping['satuan_toping'] == 'Centong' ? 'selected' : ''; ?>>
+                                Centong
+                            <option value="Iket" <?= $toping['satuan_toping'] == 'Iket' ? 'selected' : ''; ?>>Iket
+                            <option value="Paket" <?= $toping['satuan_toping'] == 'Paket' ? 'selected' : ''; ?>>Paket
                         </select>
                     </div>
                     <div class="form-group mb-3">
@@ -271,8 +272,9 @@
                         <label for="status_toping" class="form-label">Status</label>
                         <select class="form-select" aria-label="Default select example" name="status_toping" required
                             id="status_toping">
-                            <option value="1">Tersedia</option>
-                            <option value="0">Tidak Tersedia</option>
+                            <option value="1" <?= $toping['status_toping'] == '1' ? 'selected' : ''; ?>>Tersedia
+                            </option>
+                            <option value="0" <?= $toping['status_toping'] == '0' ? 'selected' : ''; ?>>Tidak
                         </select>
                     </div>
 

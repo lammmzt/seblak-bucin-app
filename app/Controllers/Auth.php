@@ -9,7 +9,7 @@ class Auth extends BaseController
 {
     public function index()
     {
-        $data['title'] = 'LOGIN | Dispermades Batang'; // set judul halaman
+        $data['title'] = 'LOGIN | '; // set judul halaman
         $data['active'] = 'AUTH'; // set active menu
         if(session()->get('logged_in')){
             return redirect()->to(base_url('/'));
